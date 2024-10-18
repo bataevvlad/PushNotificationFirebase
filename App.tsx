@@ -1,37 +1,15 @@
-import React, {useEffect} from 'react';
-import {Alert, Text, View} from 'react-native';
-import messaging from '@react-native-firebase/messaging';
+import React from 'react';
+import { Text, View } from 'react-native';
+import {useFirebaseNotifications} from './src/hooks/useFirebaseNotifications.tsx';
 
-// Register background handler
-messaging().setBackgroundMessageHandler(async remoteMessage => {
-  console.log('Message handled in the background!', remoteMessage);
-});
-
-const requestPermission = async () => {   const authStatus = await messaging().requestPermission();   console.log('Permission status:', authStatus); };
-
-const App = () => {
-
-  useEffect(() => {
-    requestPermission();
-
-    messaging()
-      .getToken()
-      .then(token => {
-        console.log('FCM Token:', token);
-      });
-
-    messaging().onTokenRefresh(token => {
-      console.log('Token refreshed:', token);
-    });
-
-    return messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-  }, []);
+const App: React.FC = () => {
+  useFirebaseNotifications();
 
   return (
-    <View>
-      <Text>Firebase Push Notifications Setup Complete!</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text style={{ fontSize: 28, fontWeight: 'bold' }}>
+        Push Notifications App.
+      </Text>
     </View>
   );
 };
